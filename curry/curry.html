@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="display: flex;">
+        <div style="flex: 1;">
+            <div>原数据 <pre class="persons"></pre></div>
+            <input type="text" class="persons-inp" />
+            <button class="persons-btn">name筛选</button>
+            <div>筛选数据<pre class="filter"></pre></div>
+        </div>
+        <div style="flex: 1;">
+            <div>原数据 <pre class="persons1"></pre></div>
+            <input type="text" class="persons-inp1" />
+            <button class="persons-btn1">name筛选</button>
+            <div>筛选数据<pre class="filter1"></pre></div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    let persons = [{
+        name: 'zhl',
+        age: 24,
+        sex: '男'
+    }, {
+        name: 'yjz',
+        age: 23,
+        sex: '女'
+    }];
+    let persons1 = [{
+        name: 'hhh',
+        age: 25,
+        sex: '男'
+    }, {
+        name: '庄吧',
+        age: 26,
+        sex: '男'
+    }];
+    function curry (fn) {
+        let arg = Array.prototype.slice.call(arguments, 1)
+        return function () {
+            return fn.apply(fn, arg.concat(Array.prototype.slice.call(arguments)))
+        }
+    }
+    function isHas (arr, pary, target) {
+        for (let key of arr) {
+            if (key[pary] == target) {
+                return key
+            }
+        }
+    }
+    document.querySelector('.persons').innerHTML = JSON.stringify(persons)
+    
+    let personsName = curry(isHas, persons)
+    
+    document.querySelector('.persons-btn').addEventListener('click', function () {
+        let val = personsName('name', document.querySelector('.persons-inp').value)
+        document.querySelector('.filter').innerHTML = val ? JSON.stringify(val) : '没有相应的数据'
+    })
+
+    document.querySelector('.persons1').innerHTML = JSON.stringify(persons1)
+    let personsName1 = curry(isHas, persons1)
+    document.querySelector('.persons-btn1').addEventListener('click', function () {
+        let val = personsName1('name', document.querySelector('.persons-inp1').value)
+        document.querySelector('.filter1').innerHTML = val ? JSON.stringify(val) : '没有相应的数据'
+    })
+</script>
